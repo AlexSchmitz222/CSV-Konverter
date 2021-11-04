@@ -7,8 +7,8 @@ from tkinter import messagebox
 categories = ["Allgemein", "Eltern", "Schüler", "Unterrichtsfrei"]
 
 
-entries = [["Test0", "Das ist ein Text BLABLABLA", "10-02-2021", "10:12:00", "10-02-2021", "10:15:00", "false", "Unterrichtsfrei, Eltern"],
-           ["Test1", "Das ist ein Text <br>BLABwadwLABLA</br>", "10-04-2021", "12:15:00", "10-06-2021", "10:30:00", "true", "Bratwurst, Oxford"]]
+entries = [["Test0", "Das ist ein Text BLABLABLA", "10-02-2021", "10:12:00", "10-02-2021", "10:15:00", "false", (0,1)],
+           ["Test1", "Das ist ein Text <br>BLABwadwLABLA</br>", "10-04-2021", "12:15:00", "10-06-2021", "10:30:00", "true", (2,3)]]
 
 
 bool_new_event = 'False'  # if true, current event is new and hasn't been saved yet
@@ -50,11 +50,12 @@ def event_listbox_select(event):
 
 def event_export_entries():
     exportCSVFile(filedialog.asksaveasfilename(title="Exportieren...", initialdir='~/Documents', defaultextension=".csv",
-                  filetype=(("Comma Separated Value", "*.csv"), ("All Files", "*.*"))), len(entries), entries)
+                  filetype=(("Comma Separated Value", "*.csv"), ("All Files", "*.*"))), len(entries), entries, categories)
 
 
 def event_new_entry():  # clear all input fields
     global bool_new_event
+    btn_delete_entry.state(['disabled'])
     ent_event_name.delete(0, END)
     txtbx_event_description.delete(1.0, END)
     ent_start_date.delete(0, END)
@@ -73,6 +74,7 @@ def event_save_entry():
     print(entries)
     for i in range(0, len(entries)):
         lstbx_event_list.insert(END, entries[i][0])
+    btn_delete_entry.state(['!disabled'])    
 
 
 def event_delete_entry():
@@ -99,8 +101,6 @@ def event_delete_all():
 
 
 # -MAIN PROGRAM------------------------------------------
-
-
 
 root = Tk()
 root.title("Kalender Tool")
