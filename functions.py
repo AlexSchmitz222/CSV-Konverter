@@ -27,19 +27,28 @@ def Update_Curr_Entry(cur_sel, entries):
     return str_eventname, str_eventdescription, str_startdate, str_starttime, str_enddate, str_endtime, bool_alldayevent, str_categories
 
 
-def save_new_event(event_name: str, event_description: str, start_date: str, start_time: str, end_date: str, end_time: str, alldayevent: bool, event_categories: tuple, entries: list, categories: list):
+def save_event(event_name: str, event_description: str, start_date: str, start_time: str, end_date: str, end_time: str, alldayevent: bool, event_categories: tuple, entries: list, categories: list, new_event: bool, cur_sel: tuple):
     # if (event_name!=0 and event_description!=0 and start_date!=0 and start_time!=0 and end_date!=0 and end_time!=0 and alldayevent=='false' and categories!=0 or event_name!=0 and event_description!=0 and start_date!=0 and end_date!=0 and  alldayevent=='true' and categories!=0):
-    #print(event_name + " , " + event_description + " , " + start_date + " , " + start_time + " , " + end_date + " , " + end_time + " , " + str(alldayevent) + " , " + str(event_categories))
-    new_event = []
+    print(new_event)
+    #print(event_name + " , " + event_description + " , " + start_date + " , " + start_time + " , " + end_date + " , " + end_time + " , " + str(alldayevent) + " , " + str(event_categories) + " , " + )
+    event = []
     new_event_categories = []
-    new_event.extend([event_name, (event_description[: -1]),
+    event.extend([event_name, (event_description[: -1]),
                      start_date, start_time, end_date, end_time, alldayevent])
     for i in event_categories:
         new_event_categories.append(categories[i])
-    new_event.append(new_event_categories)
-    print(new_event)
-    entries.append(new_event)
+    event.append(new_event_categories)
+
+
+    if (new_event=='true'):
+        entries.append(event)
+    else:
+        if (len(cur_sel) != 0):
+            index = ([int(a) for a in cur_sel][0])
+            entries[index]=event
     return(entries)
+
+    
 
 
 def delete_curr_entry(cur_sel: tuple, entries: list):

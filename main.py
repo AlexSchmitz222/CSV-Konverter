@@ -2,12 +2,16 @@ from tkinter import *
 from tkinter import ttk
 from functions import *
 from tkinter import filedialog
+from tkinter import messagebox
 # -CHANGE HERE TO UPDATE AVAILABLE EVENT CATEGORIES------
 categories = ["Allgemein", "Eltern", "Schüler", "Unterrichtsfrei"]
 
 
 entries = [["Test0", "Das ist ein Text BLABLABLA", "10-02-2021", "10:12:00", "10-02-2021", "10:15:00", "false", "Unterrichtsfrei, Eltern"],
            ["Test1", "Das ist ein Text <br>BLABwadwLABLA</br>", "10-04-2021", "12:15:00", "10-06-2021", "10:30:00", "true", "Bratwurst, Oxford"]]
+
+
+bool_new_event = 'False'  # if true, current event is new and hasn't been saved yet
 
 # -TKINTER EVENTS----------------------------------------
 
@@ -48,6 +52,7 @@ def event_export_entries():
 
 
 def event_new_entry():  # clear all input fields
+    global bool_new_event
     ent_event_name.delete(0, END)
     txtbx_event_description.delete(1.0, END)
     ent_start_date.delete(0, END)
@@ -55,20 +60,21 @@ def event_new_entry():  # clear all input fields
     ent_end_date.delete(0, END)
     ent_end_time.delete(0, END)
     bool_alldayevent.set(0)
+    bool_new_event='true'
 
 
 def event_save_entry():
     global entries
-    entries = save_new_event(ent_event_name.get(), txtbx_event_description.get("1.0", END), ent_start_date.get(), ent_start_time.get(
-    ), ent_end_date.get(), ent_end_time.get(), bool_alldayevent.get(), lstbx_categories.curselection(), entries, categories)
+    entries = save_event(ent_event_name.get(), txtbx_event_description.get("1.0", END), ent_start_date.get(), ent_start_time.get(),
+    ent_end_date.get(), ent_end_time.get(), bool_alldayevent.get(), lstbx_categories.curselection(), entries, categories, bool_new_event, lstbx_event_list.curselection())
     lstbx_event_list.delete(0, END)
     for i in range(0, len(entries)):
         lstbx_event_list.insert(END, entries[i][0])
 
 
 def event_delete_entry():
-    if (len(lstbx_event_list.curselection()) != 0):
-        global entries
+    global entries    
+    if (len(lstbx_event_list.curselection()) != 0 and len(entries)>0):
         entries = delete_curr_entry(lstbx_event_list.curselection(), entries)
         lstbx_event_list.delete(0, END)
         for i in range(0, len(entries)):
@@ -77,7 +83,13 @@ def event_delete_entry():
 
 def event_delete_all():
     global entries
-    entries = delete_all(entries)
+    if len(entries)>0:
+        query = messagebox.askyesno("Wirklich...?", "Wirklich alle Events löschen?", icon='warning')
+        print(query)
+        if (query == True):
+            
+            entries = delete_all(entries)
+            lstbx_event_list.delete(0, END)
 
 # for i in range(2,25):
 #    entries.append(["Test" + str(i)])
@@ -85,7 +97,7 @@ def event_delete_all():
 
 # -MAIN PROGRAM------------------------------------------
 
-bool_new_event = 'False'  # if true, current event is new and hasn't been saved yet
+
 
 root = Tk()
 root.title("Kalender Tool")
