@@ -17,6 +17,8 @@ bool_new_event = 'False'  # if true, current event is new and hasn't been saved 
 
 
 def event_listbox_select(event):
+    global new_event
+    new_event=False
     if (len(lstbx_event_list.curselection()) != 0):
 
         a, b, c, d, e, f, g, h = (Update_Curr_Entry(
@@ -66,8 +68,9 @@ def event_new_entry():  # clear all input fields
 def event_save_entry():
     global entries
     entries = save_event(ent_event_name.get(), txtbx_event_description.get("1.0", END), ent_start_date.get(), ent_start_time.get(),
-    ent_end_date.get(), ent_end_time.get(), bool_alldayevent.get(), lstbx_categories.curselection(), entries, categories, bool_new_event, lstbx_event_list.curselection())
+    ent_end_date.get(), ent_end_time.get(), bool_alldayevent.get(), lstbx_categories.curselection(), entries, bool_new_event, lstbx_event_list.curselection())
     lstbx_event_list.delete(0, END)
+    print(entries)
     for i in range(0, len(entries)):
         lstbx_event_list.insert(END, entries[i][0])
 
@@ -205,9 +208,11 @@ frm_controls.grid(column=3, row=1, sticky="S")
 btn_create_new_db = ttk.Button(
     frm_controls, text="Datenbank erstellen", width=20)
 btn_create_new_db.pack()
+btn_create_new_db.state(['disabled'])
 
 btn_load_from_db = ttk.Button(frm_controls, text="Datenbank laden", width=20)
 btn_load_from_db.pack()
+btn_load_from_db.state(['disabled'])
 
 btn_save_to_db = ttk.Button(frm_controls, text="Datenbank speichern", width=20)
 btn_save_to_db.pack()
@@ -215,6 +220,7 @@ btn_save_to_db.state(['disabled'])
 
 btn_import = ttk.Button(frm_controls, text="Importieren", width=20)
 btn_import.pack()
+btn_import.state(['disabled'])
 
 btn_export = ttk.Button(frm_controls, text="Exportieren",
                         width=20, command=event_export_entries)
@@ -223,6 +229,3 @@ btn_export.pack()
 
 
 root.mainloop()
-
-
-#exportCSVFile("C:/Users/alexs/Desktop/test.csv", 2, entries)
