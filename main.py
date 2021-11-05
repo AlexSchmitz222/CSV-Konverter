@@ -3,6 +3,7 @@ from tkinter import ttk
 from functions import *
 from tkinter import filedialog
 from tkinter import messagebox
+import os
 # -CHANGE HERE TO UPDATE AVAILABLE EVENT CATEGORIES------
 categories = ["Allgemein", "Eltern", "Schüler", "Unterrichtsfrei"]
 
@@ -104,6 +105,8 @@ def event_delete_all():
 
 root = Tk()
 root.title("Kalender Tool")
+dir_path = os.path.dirname(os.path.realpath(__file__))
+root.iconbitmap(str(dir_path) + "\icon.ico")
 root.resizable(False, False)
 
 frm_curr_event = ttk.Frame(root, relief="groove",
